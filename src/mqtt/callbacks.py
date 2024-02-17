@@ -1,4 +1,5 @@
-from src.mongo import mongo_client
+from src.mongo import mongo_manager
+from src.sqs import queue, sqs_manager
 
 
 def on_connect(client, obj, flags, reason_code, properties):
@@ -6,7 +7,8 @@ def on_connect(client, obj, flags, reason_code, properties):
 
 
 def on_message(client, obj, msg):
-    mongo_client.insert_document({"data": msg.payload})
+    mongo_manager.insert_document({"data": str(msg.payload)})
+    sqs_manager.send_message(queue, str(msg.payload))
     print(msg.topic + " " + str(msg.qos) + " " + str(msg.payload))
 
 

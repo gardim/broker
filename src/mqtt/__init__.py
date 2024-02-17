@@ -1,21 +1,16 @@
 import paho.mqtt.client as mqtt
 
+from src import config
 from src.mqtt.callbacks import on_message, on_connect, on_subscribe
 
 
-class MqttClientConnection:
-    def __init__(self,
-                 broker_ip: str,
-                 port: int,
-                 username: str,
-                 password: str,
-                 keepalive: int = 60,
-                 ):
-        self._broker_ip = broker_ip
-        self._port = port
-        self._username = username
-        self._password = password
-        self._keepalive = keepalive
+class MqttClientManger:
+    def __init__(self, config):
+        self._broker_ip = config["HOST"]
+        self._port = int(config["PORT"])
+        self._username = config["USERNAME"]
+        self._password = config["PASSWORD"]
+        self._keepalive = int(config["KEEPALIVE"])
 
     def start_connection(self):
         client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2)
@@ -32,3 +27,6 @@ class MqttClientConnection:
         client.on_message = on_message
         client.on_connect = on_connect
         client.on_subscribe = on_subscribe
+
+
+mqtt_manager = MqttClientManger(config["MQTT_BROKER"])
