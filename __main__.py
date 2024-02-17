@@ -1,20 +1,24 @@
-import time
+import configparser
+from src.mqtt import MqttClientConnection
 
-from configs import mqtt_broker_configs
-from src.mqtt_client_connection import MqttClientConnection
+
+def load_configurations(file_name):
+    config = configparser.ConfigParser()
+    config.read(file_name)
+    return config["MQTT_BROKER"]
 
 
 def start():
+    configurations = load_configurations('config.ini')
+
     mqtt_client_connection = MqttClientConnection(
-        mqtt_broker_configs["HOST"],
-        mqtt_broker_configs["PORT"],
-        mqtt_broker_configs["USERNAME"],
-        mqtt_broker_configs["PASSWORD"],
-        mqtt_broker_configs["KEEPALIVE"],
+        configurations["HOST"],
+        int(configurations["PORT"]),
+        configurations["USERNAME"],
+        configurations["PASSWORD"],
+        int(configurations["KEEPALIVE"]),
     )
     mqtt_client_connection.start_connection()
-
-    while True: time.sleep(0.001)
 
 
 if __name__ == "__main__":
