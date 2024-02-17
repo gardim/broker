@@ -1,6 +1,6 @@
 import paho.mqtt.client as mqtt
 
-from src.callbacks import on_message, on_connect, on_subscribe
+from src.mqtt.callbacks import on_message, on_connect, on_subscribe
 
 
 class MqttClientConnection:
@@ -24,7 +24,7 @@ class MqttClientConnection:
         client.connect(self._broker_ip, self._port)
 
         self.connect_callbacks(client)
-        client.subscribe("mytopic/topic")
+        client.subscribe("topic/topic")
         client.loop_forever()
 
     @staticmethod

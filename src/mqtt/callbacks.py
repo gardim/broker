@@ -1,8 +1,12 @@
+from src.mongo import mongo_client
+
+
 def on_connect(client, obj, flags, reason_code, properties):
     print("reason_code: " + str(reason_code))
 
 
 def on_message(client, obj, msg):
+    mongo_client.insert_document({"data": msg.payload})
     print(msg.topic + " " + str(msg.qos) + " " + str(msg.payload))
 
 
