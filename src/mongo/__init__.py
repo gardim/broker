@@ -1,9 +1,11 @@
 from pymongo import MongoClient
 
+from src import config
 
-class MongoDBHandler:
-    def __init__(self, connection_string):
-        self.client = MongoClient("localhost", 27017)
+
+class MongoManager:
+    def __init__(self, config):
+        self.client = MongoClient(config["URL"])
         self.db = self.client.mydatabase
         self.collection = self.db.mycollection
 
@@ -16,4 +18,4 @@ class MongoDBHandler:
         return list(documents)
 
 
-mongo_client = MongoDBHandler("mongodb://mongo:27017/")
+mongo_manager = MongoManager(config["MONGO_DB"])

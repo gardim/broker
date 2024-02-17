@@ -4,9 +4,21 @@ services:
   python-app:
     build: .
     depends_on:
+      - localstack
       - mongo
     links:
+      - localstack
       - mongo
+
+  localstack:
+    image: localstack/localstack
+    ports:
+      - "127.0.0.1:4566:4566"
+      - "127.0.0.1:4510-4559:4510-4559"
+    environment:
+      - SERVICES=sqs
+      - DEBUG=1
+      - DATA_DIR=/tmp/localstack/data
 
   mongo:
     image: mongo
